@@ -3,14 +3,14 @@ package com.example.spinner;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
     ListView lV;
     Spinner spin;
     TextView tVLastName, tVName, tVBirthDate, tVNumber;
@@ -36,6 +36,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     String[] classD_BirthDates = {"01/01/2010", "02/02/2009", "03/03/2010", "04/04/2008", "05/05/2009", "06/06/2010", "07/07/2008", "08/08/2009", "09/09/2009", "10/10/2009"};
     String[] classD_PhoneNumbers = {"0521234567", "0547654321", "0522345678", "0548765432", "0523456789", "0524567890", "0545678901", "0526789012", "0527890123", "0548901234"};
 
+    String[] lastNames;
+    String[] firstNames;
+    String[] birthDates;
+    String[] phoneNumbers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,31 +52,32 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spin.setAdapter(adp);
 
         spin.setOnItemSelectedListener(this);
+
+        lV.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        lV.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long rowid) {
-        String[] lastNames;
-        String[] firstNames;
-        String[] birthDates;
-        String[] phoneNumbers;
-
         if (pos == 0) {
             lastNames = classA_LastNames;
             firstNames = classA_FirstNames;
             birthDates = classA_BirthDates;
             phoneNumbers = classA_PhoneNumbers;
-        } else if (pos == 1) {
+        }
+        else if (pos == 1) {
             lastNames = classB_LastNames;
             firstNames = classB_FirstNames;
             birthDates = classB_BirthDates;
             phoneNumbers = classB_PhoneNumbers;
-        } else if (pos == 2) {
+        }
+        else if (pos == 2) {
             lastNames = classC_LastNames;
             firstNames = classC_FirstNames;
             birthDates = classC_BirthDates;
             phoneNumbers = classC_PhoneNumbers;
-        } else {
+        }
+        else {
             lastNames = classD_LastNames;
             firstNames = classD_FirstNames;
             birthDates = classD_BirthDates;
@@ -84,17 +90,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         lV.setAdapter(new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, students));
-
-        lV.setOnItemClickListener((parent1, view1, pos1, id1) -> {
-            tVLastName.setText("Last Name: " + lastNames[pos1]);
-            tVName.setText("First Name: " + firstNames[pos1]);
-            tVBirthDate.setText("Birth Date: " + birthDates[pos1]);
-            tVNumber.setText("Phone: " + phoneNumbers[pos1]);
-        });
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+        tVLastName.setText("Last Name: " + lastNames[pos]);
+        tVName.setText("First Name: " + firstNames[pos]);
+        tVBirthDate.setText("Birth Date: " + birthDates[pos]);
+        tVNumber.setText("Phone: " + phoneNumbers[pos]);
+    }
 
     private void initView() {
         lV = findViewById(R.id.lV);
